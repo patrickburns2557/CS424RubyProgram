@@ -85,3 +85,7 @@ puts "array:"
 puts "index 0: #{arr[0]}"
 puts "index 1: #{arr[1]}"
 puts "index 2: #{arr[2]}"
+puts "=========="
+puts "aq234  my name bruh".split(" ", 2)
+puts "=========="
+puts "aq234 my name bruh".partition(" ")

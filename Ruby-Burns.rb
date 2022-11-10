@@ -2,6 +2,22 @@
 fileInArray = IO.readlines("register.txt")
 
 
+#TESTING SPLITTING THE INPUT INTO THE NEEDED PARTS
+arrayTest = []
+
+fileInArray.each do |i|
+    arrayTest.append(i.split(" ", 2))
+end
+
+arrayTest.each do |i|
+    puts i
+end
+
+
+
+
+
+
 class Student
     def initialize(id, name)
         @id = id
@@ -42,7 +58,7 @@ class Course
     end
 
     def getCRN
-        @crnputs fileInArray[0]
+        @crn
     end
 
     def getCourseName
@@ -59,7 +75,7 @@ class Seat
     end
 end
 
-
+puts "=================="
 
 student1 = Student.new(5555, "bob")
 
