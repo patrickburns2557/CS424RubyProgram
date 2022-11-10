@@ -1,3 +1,7 @@
+
+fileInArray = IO.readlines("register.txt")
+
+
 class Student
     def initialize(id, name)
         @id = id
@@ -11,7 +15,17 @@ class Student
         print @name
         puts
     end
+
+    def getID
+        @id
+    end
+
+    def getName
+        @name
+    end
 end
+
+
 
 class Course
     def initialize(crn, courseName)
@@ -26,7 +40,26 @@ class Course
         print @courseName
         puts
     end
+
+    def getCRN
+        @crnputs fileInArray[0]
+    end
+
+    def getCourseName
+        @courseName
+    end
 end
+
+
+
+class Seat
+    def initialize(studentID, courseCRN)
+        @studentID = studentID
+        @courseCRN = courseCRN
+    end
+end
+
+
 
 student1 = Student.new(5555, "bob")
 
@@ -41,3 +74,7 @@ student1.printMe
 student2.printMe
 course1.printMe
 course2.printMe
+
+
+puts "student 1 name: #{student1.getName} student 1 id: #{student1.getID}"
+puts "student 2 name: #{student2.getName} student 2 id: #{student2.getID}"
