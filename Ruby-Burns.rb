@@ -10,7 +10,13 @@ fileInArray.each do |i|
 end
 
 arrayTest.each do |i|
-    puts i
+    #puts i.gsub(/\s+/,' ')
+    #puts i
+    #puts "--==space==--"
+    puts i[0]
+    #puts i[1]
+    i[1] = i[1].to_s.gsub(/\s+/,' ') #eliminate whitespace
+    puts i[1]
 end
 
 
