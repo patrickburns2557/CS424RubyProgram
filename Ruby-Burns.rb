@@ -1,27 +1,38 @@
 
-fileInArray = IO.readlines("register.txt")
+fileInputArray = IO.readlines("register.txt")
 
 
 #TESTING SPLITTING THE INPUT INTO THE NEEDED PARTS
-arrayTest = []
+#arrayTest = []
 
-fileInArray.each do |i|
-    arrayTest.append(i.split(" ", 2))
+#
+#fileInArray.each do |i|
+#    arrayTest.append(i.split(" ", 2))
+#end
+#
+#arrayTest.each do |i|
+#    #puts i.gsub(/\s+/,' ')
+#    #puts i
+#    #puts "--==space==--"
+#    puts i[0]
+#    #puts i[1]
+#    i[1] = i[1].to_s.gsub(/\s+/,' ') #eliminate whitespace
+#    puts i[1]
+#end
+
+splitEntries = []
+
+#split each line into the 2 parts from the first space
+#this will create an array of arrays, witch each inner array containing 2 entries
+fileInputArray.each do |i|
+    splitEntries.append(i.split(" ", 2))
 end
 
-arrayTest.each do |i|
-    #puts i.gsub(/\s+/,' ')
-    #puts i
-    #puts "--==space==--"
-    puts i[0]
-    #puts i[1]
-    i[1] = i[1].to_s.gsub(/\s+/,' ') #eliminate whitespace
-    puts i[1]
+#convert all whitespace in the second portion of each entry into a single space
+#by searching for whitespace with regex and replacing all matches with a single space
+splitEntries.each do |i|
+    i[1] = i[1].to_s.gsub(/\s+/, ' ')
 end
-
-
-
-
 
 
 class Student
@@ -79,24 +90,71 @@ class Seat
         @studentID = studentID
         @courseCRN = courseCRN
     end
+
+    def getStudentID
+        @studentID
+    end
+
+    def getCourseCRN
+        @courseCRN
+    end
 end
 
-puts "=================="
 
-student1 = Student.new(5555, "bob")
-
-student2 = Student.new(4444, "jack three")
-
-course1 = Course.new("123", "math");
-
-course2 = Course.new("222", "physics seventeen eighty three")
+studentArray = []
+courseArray = []
+seatArray = []
 
 
-student1.printMe
-student2.printMe
-course1.printMe
-course2.printMe
+
+finishedStudents = false
+finishedCourses = false
+
+#loop through the array containing all the information from the file
+splitEntries.each do |first, second|
+    #if we're still in the students section
+    if !finishedStudents and !finishedCourses
+        #check to see if we've reached the blank line, if we have change boolean value
+        #to indicate students are finished and continue to next loop iteration
+        if first == ""
+            finishedStudents = true
+            next
+        end
+
+        student = Student.new(first, second)
+        studentArray.append(student)
+
+    elsif finishedStudents and !finishedCourses
+        #if we've reached a blank line, courses section is finished
+        if first == ""
+            finishedCourses = true
+            next
+        end
+        course = Course.new(first, second)
+        courseArray.append(course)
+
+    else
+        seat = Seat.new(first, second)
+        seatArray.append(seat)
+    end
+
+end
 
 
-puts "student 1 name: #{student1.getName} student 1 id: #{student1.getID}"
-puts "student 2 name: #{student2.getName} student 2 id: #{student2.getID}"
+puts "Student array:"
+studentArray.each do |i|
+    print "\"", i.getID, "\"  ", "\"", i.getName, "\"", "\n"
+end
+puts "========="
+puts
+puts "Course array:"
+courseArray.each do |i|
+    print "\"", i.getCRN, "\  ", "\"", i.getCourseName, "\"", "\n"
+end
+puts "========="
+puts
+puts "Seat array:"
+seatArray.each do |i|
+    print "\"", i.getStudentID, "\"  ", "\"", i.getCourseCRN, "\"" "\n"
+end
+puts "========="
