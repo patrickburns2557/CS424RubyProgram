@@ -1,24 +1,4 @@
-
-fileInputArray = IO.readlines("register.txt")
-
-splitEntries = []
-
-#split each line into the 2 parts from the first space
-#this will create an array of arrays, witch each inner array containing 2 entries
-fileInputArray.each do |i|
-    splitEntries.append(i.split(" ", 2))
-end
-
-#convert all whitespace into a single space by searching for whitespace 
-#with regex and replacing all matches with a single space
-splitEntries.each do |i|
-    i[0] = i[0].to_s.gsub(/\s+/, ' ')
-    i[0] = i[0].to_s.strip
-    i[1] = i[1].to_s.gsub(/\s+/, ' ')
-    i[1] = i[1].to_s.strip
-end
-
-
+#Class for a student that contains an ID and a Name
 class Student
     def initialize(id, name)
         @id = id
@@ -43,7 +23,7 @@ class Student
 end
 
 
-
+#Class for a course that contains a CRN code and a course name
 class Course
     def initialize(crn, courseName)
         @crn = crn
@@ -68,7 +48,8 @@ class Course
 end
 
 
-
+#Class to represent a student enrolled ina course that contains
+#the student ID and the CRN of the course they are enrolled in
 class Seat
     def initialize(studentID, courseCRN)
         @studentID = studentID
@@ -84,66 +65,96 @@ class Seat
     end
 end
 
+#Function splits the input line into 2 pieces at the first occurence of a space
+#and then converts all whitespace into a single space and gets rid of all
+#leading and trailing whitespace.
+#RETURN: a 2 element array containing the 2 split pieces
+def splitLines (inputLine)
+    split = inputLine.split(" ", 2)
+    split[0] = split[0].to_s.gsub(/\s+/, ' ')
+    split[0] = split[0].to_s.strip
+    split[1] = split[1].to_s.gsub(/\s+/, ' ')
+    split[1] = split[1].to_s.strip
+    split
+end
 
+##################################################################################################
 
 studentArray = []
 courseArray = []
 seatArray = []
 
-finishedStudents = false
-finishedCourses = false
+inputFile = File.open("register.txt", "r")
 
-#loop through the array containing all the information from the file
-splitEntries.each do |first, second|
-    #if we're still in the students section
-    if !finishedStudents and !finishedCourses
-        #check to see if we've reached the blank line, if we have change boolean value
-        #to indicate students are finished and continue to next loop iteration
-        if first == ""
-            finishedStudents = true
-            next
+puts "======================================\nReading in Data.\n\n"
+
+#Read in students, stop at the empty line
+currentLine = inputFile.gets
+while currentLine != "\n"
+    split = splitLines(currentLine)
+
+    student = Student.new(split[0], split[1])
+    studentArray.append(student)
+
+    currentLine = inputFile.gets
+end
+
+
+#Read in courses, stop at the empty line
+currentLine = inputFile.gets
+while currentLine != "\n"
+    split = splitLines(currentLine)
+
+    course = Course.new(split[0], split[1])
+    courseArray.append(course)
+
+    currentLine = inputFile.gets
+end
+
+#Read in seats, stop when end of file reached
+currentLine = inputFile.gets
+while currentLine != nil
+    split = splitLines(currentLine)
+    
+    
+    foundS = false
+    studentArray.each do |student|
+        if student.getID == split[0]
+            foundS = true
+            break
         end
-
-        student = Student.new(first, second)
-        studentArray.append(student)
-
-    elsif finishedStudents and !finishedCourses
-        #if we've reached a blank line, courses section is finished
-        if first == ""
-            finishedCourses = true
-            next
-        end
-        course = Course.new(first, second)
-        courseArray.append(course)
-
-    else
-        seat = Seat.new(first, second)
-        seatArray.append(seat)
     end
+    if !foundS
+        print "Student with ID \"", split[0], "\" is not enrolled.\n"
+    end
+
+    foundC = false
+    courseArray.each do |course|
+        if course.getCRN == split[1]
+            foundC = true
+            break
+        end
+    end
+    if !foundC
+        print "Course with CRN \"", split[1], "\" does not exist.\n"
+    end
+
+    if !(foundS and foundC)
+        currentLine = inputFile.gets
+        next
+    end
+    
+    seat = Seat.new(split[0], split[1])
+    seatArray.append(seat)
+
+    currentLine = inputFile.gets
 end
 
-
-puts "Student array:"
-studentArray.each do |i|
-    print "\"", i.getID, "\"  ", "\"", i.getName, "\"", "\n"
-end
-puts "========="
-puts
-puts "Course array:"
-courseArray.each do |i|
-    print "\"", i.getCRN, "\"  ", "\"", i.getCourseName, "\"", "\n"
-end
-puts "========="
-puts
-puts "Seat array:"
-seatArray.each do |i|
-    print "\"", i.getStudentID, "\"  ", "\"", i.getCourseCRN, "\"" "\n"
-end
-puts "=========\n\n\n\n\n\n"
+print "\nData read finished.\n======================================\n\n"
 
 
-
-studentArray.each do |student| #test each student
+#Print out each student and the classes they're enrolled in
+studentArray.each do |student|
     courseCounter = 0
     print "Student: ", student.getName, "\n"
     puts "Courses enrolled in:"
@@ -160,8 +171,9 @@ studentArray.each do |student| #test each student
     print "\n\n"
 end
 
-print "\n\n\n\n"
+print "\n\n"
 
+#Print out each class and the students enrolled in it
 courseArray.each do |course|
     studentCounter = 0
     print "Course: ", course.getCourseName, "\n"
