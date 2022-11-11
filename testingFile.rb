@@ -89,3 +89,16 @@ puts "=========="
 puts "aq234  my name bruh".split(" ", 2)
 puts "=========="
 puts "aq234 my name bruh".partition(" ")
+
+
+
+puts "=========================="
+puts
+puts
+
+aFile = File.open("testinput.txt", "r")
+
+puts aFile.gets
+puts aFile.gets
+puts aFile.gets
+puts aFile.gets

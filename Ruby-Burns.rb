@@ -1,25 +1,6 @@
 
 fileInputArray = IO.readlines("register.txt")
 
-
-#TESTING SPLITTING THE INPUT INTO THE NEEDED PARTS
-#arrayTest = []
-
-#
-#fileInArray.each do |i|
-#    arrayTest.append(i.split(" ", 2))
-#end
-#
-#arrayTest.each do |i|
-#    #puts i.gsub(/\s+/,' ')
-#    #puts i
-#    #puts "--==space==--"
-#    puts i[0]
-#    #puts i[1]
-#    i[1] = i[1].to_s.gsub(/\s+/,' ') #eliminate whitespace
-#    puts i[1]
-#end
-
 splitEntries = []
 
 #split each line into the 2 parts from the first space
@@ -28,10 +9,13 @@ fileInputArray.each do |i|
     splitEntries.append(i.split(" ", 2))
 end
 
-#convert all whitespace in the second portion of each entry into a single space
-#by searching for whitespace with regex and replacing all matches with a single space
+#convert all whitespace into a single space by searching for whitespace 
+#with regex and replacing all matches with a single space
 splitEntries.each do |i|
+    i[0] = i[0].to_s.gsub(/\s+/, ' ')
+    i[0] = i[0].to_s.strip
     i[1] = i[1].to_s.gsub(/\s+/, ' ')
+    i[1] = i[1].to_s.strip
 end
 
 
@@ -101,11 +85,10 @@ class Seat
 end
 
 
+
 studentArray = []
 courseArray = []
 seatArray = []
-
-
 
 finishedStudents = false
 finishedCourses = false
@@ -137,7 +120,6 @@ splitEntries.each do |first, second|
         seat = Seat.new(first, second)
         seatArray.append(seat)
     end
-
 end
 
 
@@ -149,7 +131,7 @@ puts "========="
 puts
 puts "Course array:"
 courseArray.each do |i|
-    print "\"", i.getCRN, "\  ", "\"", i.getCourseName, "\"", "\n"
+    print "\"", i.getCRN, "\"  ", "\"", i.getCourseName, "\"", "\n"
 end
 puts "========="
 puts
@@ -157,4 +139,42 @@ puts "Seat array:"
 seatArray.each do |i|
     print "\"", i.getStudentID, "\"  ", "\"", i.getCourseCRN, "\"" "\n"
 end
-puts "========="
+puts "=========\n\n\n\n\n\n"
+
+
+
+studentArray.each do |student| #test each student
+    courseCounter = 0
+    print "Student: ", student.getName, "\n"
+    puts "Courses enrolled in:"
+    seatArray.each do |seat| #find which classes the student is enrolled in
+        if seat.getStudentID == student.getID
+            courseCounter += 1
+            courseArray.each do |course| #find which course name matches the found course CRN
+                if course.getCRN == seat.getCourseCRN
+                    print "[", courseCounter, "] ", course.getCourseName, "\n"
+                end
+            end
+        end
+    end
+    print "\n\n"
+end
+
+print "\n\n\n\n"
+
+courseArray.each do |course|
+    studentCounter = 0
+    print "Course: ", course.getCourseName, "\n"
+    puts "Students enrolled:"
+    seatArray.each do |seat|
+        if seat.getCourseCRN == course.getCRN
+            studentCounter += 1
+            studentArray.each do |student|
+                if student.getID == seat.getStudentID
+                    print "[", studentCounter, "] ", student.getName, "\n"
+                end
+            end
+        end
+    end
+    print "\n\n"
+end
