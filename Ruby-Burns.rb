@@ -116,7 +116,7 @@ currentLine = inputFile.gets
 while currentLine != nil
     split = splitLines(currentLine)
     
-    
+    #Check if the student with the given ID is enrolled
     foundS = false
     studentArray.each do |student|
         if student.getID == split[0]
@@ -128,6 +128,7 @@ while currentLine != nil
         print "Student with ID \"", split[0], "\" is not enrolled.\n"
     end
 
+    #Check if the course with the given CRN exists or not
     foundC = false
     courseArray.each do |course|
         if course.getCRN == split[1]
@@ -139,6 +140,7 @@ while currentLine != nil
         print "Course with CRN \"", split[1], "\" does not exist.\n"
     end
 
+    #If either the student or the course doesn't exist, don't create the Seat object
     if !(foundS and foundC)
         currentLine = inputFile.gets
         next
@@ -178,10 +180,10 @@ courseArray.each do |course|
     studentCounter = 0
     print "Course: ", course.getCourseName, "\n"
     puts "Students enrolled:"
-    seatArray.each do |seat|
+    seatArray.each do |seat| #find which students are enrolled in the class
         if seat.getCourseCRN == course.getCRN
             studentCounter += 1
-            studentArray.each do |student|
+            studentArray.each do |student| #find which student name matches the found student ID
                 if student.getID == seat.getStudentID
                     print "[", studentCounter, "] ", student.getName, "\n"
                 end
