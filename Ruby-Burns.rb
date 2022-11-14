@@ -152,8 +152,9 @@ while currentLine != nil
     currentLine = inputFile.gets
 end
 
-print "\nData read finished.\n======================================\n\n"
+print "\nData read finished.\n======================================\n\n\n"
 
+print "STUDENTS:\n======================================\n"
 
 #Print out each student and the classes they're enrolled in
 studentArray.each do |student|
@@ -174,6 +175,8 @@ studentArray.each do |student|
 end
 
 print "\n\n"
+
+print "COURSES:\n======================================\n"
 
 #Print out each class and the students enrolled in it
 courseArray.each do |course|
