@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 #Class for a student that contains an ID and a Name
 class Student
     def initialize(id, name)
@@ -78,7 +80,7 @@ def splitLines (inputLine)
     split
 end
 
-##################################################################################################
+######################################################################
 
 studentArray = []
 courseArray = []
@@ -152,6 +154,8 @@ while currentLine != nil
     currentLine = inputFile.gets
 end
 
+inputFile.close
+
 print "\nData read finished.\n======================================\n\n\n"
 
 print "STUDENTS:\n======================================\n"
@@ -164,11 +168,10 @@ studentArray.each do |student|
     seatArray.each do |seat| #find which classes the student is enrolled in
         if seat.getStudentID == student.getID
             courseCounter += 1
-            courseArray.each do |course| #find which course name matches the found course CRN
-                if course.getCRN == seat.getCourseCRN
-                    print "[", courseCounter, "] ", course.getCourseName, "\n"
-                end
-            end
+
+            #find which course name matches the found Course CRN in the seat
+            course = courseArray.find { |c| c.getCRN == seat.getCourseCRN}
+            print "[", courseCounter, "] ", course.getCourseName, "\n"
         end
     end
     print "\n\n"
@@ -186,11 +189,10 @@ courseArray.each do |course|
     seatArray.each do |seat| #find which students are enrolled in the class
         if seat.getCourseCRN == course.getCRN
             studentCounter += 1
-            studentArray.each do |student| #find which student name matches the found student ID
-                if student.getID == seat.getStudentID
-                    print "[", studentCounter, "] ", student.getName, "\n"
-                end
-            end
+            
+            #find which student name matches the found Student ID in the seat
+            student = studentArray.find { |s| s.getID == seat.getStudentID}
+            print "[", studentCounter, "] ", student.getName, "\n"
         end
     end
     print "\n\n"
