@@ -120,24 +120,24 @@ while currentLine != nil
     
     #Check if the student with the given ID is enrolled
     foundS = false
-    studentArray.each do |student|
-        if student.getID == split[0]
+    studentArray.find { |s| 
+        if s.getID == split[0]
             foundS = true
             break
         end
-    end
+    }
     if !foundS
         print "Student with ID \"", split[0], "\" is not enrolled.\n"
     end
 
     #Check if the course with the given CRN exists or not
     foundC = false
-    courseArray.each do |course|
-        if course.getCRN == split[1]
+    courseArray.find { |c|
+        if c.getCRN == split[1]
             foundC = true
             break
         end
-    end
+    }
     if !foundC
         print "Course with CRN \"", split[1], "\" does not exist.\n"
     end
