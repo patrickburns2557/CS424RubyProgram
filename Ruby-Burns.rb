@@ -7,14 +7,6 @@ class Student
         @name = name
     end
 
-    def printMe
-        print "ID: "
-        print @id
-        print "  Name: "
-        print @name
-        puts
-    end
-
     def getID
         @id
     end
@@ -30,14 +22,6 @@ class Course
     def initialize(crn, courseName)
         @crn = crn
         @courseName = courseName
-    end
-
-    def printMe
-        print "CRN: "
-        print @crn
-        print "  Name: "
-        print @courseName
-        puts
     end
 
     def getCRN
